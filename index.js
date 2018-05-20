@@ -152,7 +152,7 @@ setInterval(function () {
             header: { "type": "location" },
             data: JSON.stringify(firstData),
         })
-        sleep(100);
+        sleep(500);
         $.get("http://172.23.52.113:4567/sounds", function (soundData, status) {
             let data = JSON.parse(soundData);
             let secondData = []
@@ -172,7 +172,7 @@ setInterval(function () {
         });
     };
 }
-    , 500)
+    , 1000)
 
 
 
