@@ -31,7 +31,7 @@ function watchSuccess(pos) {
     if (count == 0) {
         var map = new L.Map('map', {
             center: new L.LatLng(latitude, longitude),
-            zoom: 18,
+            zoom: 20,
             layers: [baseLayer, heatmapLayer]
         });
         ready = true
