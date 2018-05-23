@@ -1,6 +1,6 @@
 var socket = io();
 var map;
-var tempAudio = 0;
+var currentAudio = 0;
 var ready = false;
 
 var baseLayer = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiY3JhenljYXQ5eCIsImEiOiJjamhpZ254bjAwZ2xqMzZudXhleG8xemhlIn0.zSQ57mVkSHuQ6c6xH6ZWZA', {
@@ -75,9 +75,16 @@ if (navigator.getUserMedia) {
                 }
 
                 var average = values / length;
-                if (ready) {
-                    tempAudio = Math.round(average);
+                var tempAudio = Math.round(average)
+                if(tempAudio - currentAudio > 5 || tempAudio - currentAudio < -5){
+                    newData = {
+                        latitude: latitude,
+                        longitude: longitude,
+                        decibels: tempAudio
+                    }
+                    socket.emit('soundUpdate', newData);
                 }
+                currentAudio = tempAudio;
             } // end fn stream
         },
         function (err) {
@@ -86,16 +93,6 @@ if (navigator.getUserMedia) {
 } else {
     console.log("getUserMedia not supported");
 }
-
-setInterval(function(){
-    newData = {
-        latitude: latitude,
-        longitude: longitude,
-        decibels: tempAudio
-    }
-    console.log(newData)
-    socket.emit('soundUpdate', newData);
-},100)
 
 socket.on('soundBroadcast', function (data) {
     if (ready) {
