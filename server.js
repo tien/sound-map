@@ -2,8 +2,9 @@ var express = require('express');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var redis = require('redis')
 
-heatmapData = {max: 75, data:[]};
+heatmapData = {max: 60, data:[]};
 app.use(express.static('public'))
 app.get('/', function (req, res) {
     res.render('index')
@@ -22,11 +23,11 @@ io.on('connection', function (socket) {
         if (!found) {
             heatmapData.data.push({latitude:data.latitude, longitude:data.longitude, decibels: data.decibels});
         }
-        console.log(heatmapData.data)
         io.emit('soundBroadcast', heatmapData);
     });
 })
 
+var port = process.env.PORT || 3000;
 
-http.listen(3000)
+http.listen(port);
       

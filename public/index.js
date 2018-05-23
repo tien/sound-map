@@ -93,11 +93,13 @@ setInterval(function(){
         longitude: longitude,
         decibels: tempAudio
     }
+    console.log(newData)
     socket.emit('soundUpdate', newData);
-},1000)
+},100)
 
 socket.on('soundBroadcast', function (data) {
     if (ready) {
         heatmapLayer.setData(data);
+        console.log(data)
     }
 })
