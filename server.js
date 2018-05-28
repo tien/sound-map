@@ -14,22 +14,32 @@ app.get('/', function (req, res) {
 io.on('connection', function (socket) {
     console.log('a user connected');
     socket.on('soundUpdate', function (data) {
-        let newData = {latitude:data.latitude, longitude:data.longitude, decibels: data.decibels}
-        for (let [index,o] of heatmapData.entries()) {
-            if(o.latitude == newData.latitude && o.longitude == newData.longitude) {
+        console.log(data)
+        let newData = {
+            latitude: data.latitude,
+            longitude: data.longitude,
+            decibels: data.decibels
+        }
+        for (let [index, o] of heatmapData.entries()) {
+            if (o.latitude == newData.latitude && o.longitude == newData.longitude) {
                 heatmapData.splice(index);
             }
         }
-        let index = heatmapData.push(newData) - 1;
-        setTimeout(function(){
-            heatmapData.splice(index)
-            io.emit('soundBroadcast', {max: 75, data: heatmapData});
-        },10000)
-        io.emit('soundBroadcast', {max: 75, data: heatmapData});
+        heatmapData.push(newData);
+        setTimeout(function () {
+            heatmapData.splice(heatmapData.indexOf(newData))
+            io.emit('soundBroadcast', {
+                max: 70,
+                data: heatmapData
+            });
+        }, 10000)
+        io.emit('soundBroadcast', {
+            max: 70,
+            data: heatmapData
+        });
     });
 })
 
 var port = process.env.PORT || 3000;
 
 http.listen(port);
-      

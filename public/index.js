@@ -75,15 +75,13 @@ if (navigator.getUserMedia) {
                 }
 
                 var average = values / length;
-                var tempAudio = Math.round(average)
-                if(tempAudio - currentAudio > 5 || tempAudio - currentAudio < -5){
-                    newData = {
-                        latitude: latitude,
-                        longitude: longitude,
-                        decibels: tempAudio
-                    }
-                    socket.emit('soundUpdate', newData);
+                var tempAudio = Math.round(average) + 5
+                newData = {
+                    latitude: latitude,
+                    longitude: longitude,
+                    decibels: tempAudio
                 }
+                socket.emit('soundUpdate', newData);
                 currentAudio = tempAudio;
             } // end fn stream
         },
@@ -97,6 +95,5 @@ if (navigator.getUserMedia) {
 socket.on('soundBroadcast', function (data) {
     if (ready) {
         heatmapLayer.setData(data);
-        console.log(data)
     }
 })
