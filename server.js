@@ -26,13 +26,6 @@ io.on('connection', function (socket) {
             }
         }
         heatmapData.push(newData);
-        setTimeout(function () {
-            heatmapData.splice(heatmapData.indexOf(newData))
-            io.emit('soundBroadcast', {
-                max: 70,
-                data: heatmapData
-            });
-        }, 10000)
         io.emit('soundBroadcast', {
             max: 70,
             data: heatmapData
